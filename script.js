@@ -265,3 +265,9 @@ window.onload = () => {
   renderAll();
   updateSelectedText();
 };
+
+window.onload = () => {
+  console.log('Page loaded, running initial render');
+  renderAll();
+  updateSelectedText();
+};
