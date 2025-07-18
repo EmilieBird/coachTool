@@ -1,10 +1,10 @@
-#importExportContainer > div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}    
+	#importExportContainer > div {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 12px;
+	  flex-wrap: wrap;
+	}    
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -202,3 +202,36 @@
         content: none;
       }
     }
+	
+	.year-button {
+	  display: inline-flex;
+	  align-items: center;
+	  padding: 8px 12px;
+	  margin: 4px;
+	  border: 2px solid #ccc;
+	  background-color: #f9f9f9;
+	  color: #333;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  font-size: 16px;
+	  transition: all 0.2s ease;
+	  position: relative;
+	}
+
+	.year-button:hover {
+	  background-color: #e6e6e6;
+	}
+
+	.year-button.active {
+	  background-color: #d4edda;
+	  border-color: #28a745;
+	  color: #155724;
+	}
+
+	.year-button.active::before {
+	  content: '✓';
+	  font-weight: bold;
+	  color: #28a745;
+	  margin-right: 6px;
+	}
+

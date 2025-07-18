@@ -12,9 +12,12 @@
   <div id="randomizeAllContainer">
     <button id="randomizeAllBtn" onclick="randomizeAll()">Bland alle</button>
     <hr class="separator" />
-    <button id="1år" onclick="">1. års</button>
-    <button id="2år" onclick="">2. års</button>
-    <button id="3år" onclick="">3. års</button>
+	<button id="1år" class="year-button" onclick="toggleYearGroup('1år')">1. år</button>
+	<button id="2år" class="year-button" onclick="toggleYearGroup('2år')">2. år</button>
+	<button id="3år" class="year-button" onclick="toggleYearGroup('3år')">3. år</button>
+
+
+
     <hr class="separator" />
     <button id="resetAllBtn" class="reset-button" onclick="resetAll()">Nulstil alle</button>
   </div>

@@ -1,45 +1,60 @@
     // Default arrays for each list (reverted to original content exactly)
 const defaultLists = {
   1: [
-    'Hypertension',
-    'Dyslipidæmi',
-    'Iskemiske hjertekar-sygdomme',
-    'Hormonelle kontraceptiva',
-    'Thyroidea-sygdomme',
-    'Bakterieinfektion',
-    'Svampeinfektion',
-    'Virusinfektion',
-    'Klimakteriet',
-    'KOL',
-    'Migræne',
-    'Obstipation',
-    'Osteoporose',
-    'Prostatahyperplasi',
-    'ADHD',
-    'Akne',
-    'Allergi',
-    'Astma',
-    'Diarré',
-    'Depression',
-    'Kontakteksem',
-    'Atopisk eksem',
-    'Epilepsi',
-    'Erektil dysfunktion',
-    'Forkølelse',
-    'Hoste',
-    'Gigt',
-    'Glaukom',
-    'Skizofreni',
-    'Spændings-hovedpine',
-    'MOH',
-    'Menstruations-smerter',
-    'Dyspepsi',
-    'Mavesår',
-    'Refluks',
-    'T1 Diabetes',
-    'T2 Diabetes',
-    'Urininkontinens',
-    'Vitaminer og mineraler'
+  "ADHD",
+  "Adipositas",
+  "Akne",
+  "Allergi",
+  "Allergisk kontakteksem",
+  "Angst",
+  "Astma",
+  "Atopisk eksem",
+  "Bakterieinfektion",
+  "Demens",
+  "Depression",
+  "Diarré",
+  "Dyslipidæmi",
+  "Dyspepsi",
+  "Epilepsi",
+  "Ernæring",
+  "Erektil dysfunktion",
+  "Fysiske kontraceptiva",
+  "Forkølelse",
+  "Glaukom",
+  "Hoste",
+  "Hormonelle kontraceptiva",
+  "Hypertension",
+  "Hæmorider",
+  "Irritativ kontakteksem",
+  "Iskæmiske hjertekar-sygdomme",
+  "Klimakteriet",
+  "KOL",
+  "Leddegigt",
+  "Mavesår",
+  "Menstruations-smerter",
+  "Migræne",
+  "MOH",
+  "Neuropatiske smerter",
+  "Obstipation",
+  "Osteoporose",
+  "Prostatahyperplasi",
+  "Psoriasis",
+  "Refluks",
+  "Rygestop",
+  "Skizofreni",
+  "Slidgigt",
+  "Spændings-hovedpine",
+  "Svampeinfektion",
+  "Søvnbesvær",
+  "T1 Diabetes",
+  "T2 Diabetes",
+  "Thyroidea-sygdomme",
+  "Transportsyge",
+  "Tørre øjne",
+  "Urininkontinens",
+  "Urinsyregigt",
+  "Vitaminer og mineraler",
+  "Virusinfektion"
   ],
   2: [
     'Barn under 2 år',
@@ -64,6 +79,100 @@ const defaultLists = {
     'Interaktioner'
   ]
 };
+const yearGroups = {
+  "1år": new Set([
+    "Vitaminer og mineraler", "Ernæring", "Diarré", "Obstipation", "Hæmorider", "Refluks", "Dyspepsi",
+    "Mavesår", "Akne", "Psoriasis", "Atopisk eksem", "Irritativ kontakteksem", "Allergisk kontakteksem",
+    "Virusinfektion", "Svampeinfektion", "Bakterieinfektion", "Spændings-hovedpine", "MOH",
+    "Menstruations-smerter", "Migræne", "Allergi"
+  ]),
+  "2år": new Set([
+    "Transportsyge", "Astma", "KOL", "Rygestop", "Tørre øjne", "Glaukom", "T1 Diabetes", "T2 Diabetes",
+    "Adipositas", "Klimakteriet", "Hormonelle kontraceptiva", "Fysiske kontraceptiva", "Hypertension",
+    "Slidgigt", "Leddegigt", "Urinsyregigt", "Osteoporose", "Dyslipidæmi"
+  ]),
+  "3år": new Set([
+    "Iskæmiske hjertekar-sygdomme", "Neuropatiske smerter", "Erektil dysfunktion", "Urininkontinens",
+    "Prostatahyperplasi", "Epilepsi", "Thyroidea-sygdomme", "Angst", "Depression", "Demens", "ADHD"
+  ])
+};
+
+// Current topics selected (starts with all from default)
+let currentTopics = new Set(defaultLists[1]);
+
+// Track which year buttons are toggled
+let activeGroups = {
+  "1år": false,
+  "2år": false,
+  "3år": false
+};
+
+
+function toggleYearGroup(groupId) {
+  activeGroups[groupId] = !activeGroups[groupId];
+
+  const button = document.getElementById(groupId);
+  if (button) {
+    button.classList.toggle("active", activeGroups[groupId]);
+	button.setAttribute('aria-pressed', activeGroups[groupId]);
+
+  }
+
+ // If no buttons are active, show full default list
+const anyActive = Object.values(activeGroups).some(val => val);
+
+if (!anyActive) {
+  currentTopics = new Set(defaultLists[1]);
+} else {
+  currentTopics = new Set();
+  for (const key in activeGroups) {
+    if (activeGroups[key]) {
+      for (const item of yearGroups[key]) {
+        currentTopics.add(item);
+      }
+    }
+  }
+}
+
+
+  lists[1] = [...currentTopics].sort();
+  selectedIndices[1] = null;
+  renderList(1);
+}
+
+
+
+function resetAll() {
+  lists = {
+    1: [...defaultLists[1]],
+    2: [...defaultLists[2]],
+    3: [...defaultLists[3]],
+    4: [...defaultLists[4]]
+  };
+
+  selectedIndices = {
+    1: null,
+    2: null,
+    3: null,
+    4: null
+  };
+
+  currentTopics = new Set(defaultLists[1]);
+
+  // Reset year group buttons
+  for (const key in activeGroups) {
+    activeGroups[key] = false;
+    const btn = document.getElementById(key);
+    if (btn) btn.classList.remove("active");
+  }
+
+  renderAll();
+  updateSelectedText(); // just in case
+}
+
+
+
+
 
     // Current lists (start as deep copies of defaults)
     let lists = {
@@ -136,7 +245,14 @@ const defaultLists = {
       const input = document.getElementById('input' + listNum);
       const value = input.value.trim();
       if (value === '') return;
-      lists[listNum].push(value);
+        // Prevent duplicates (case-insensitive)
+	  const exists = lists[listNum].some(item => item.toLowerCase() === value.toLowerCase());
+	  if (exists) {
+		input.value = '';
+		return;
+	  } 
+	  lists[listNum].push(value);
+	  lists[listNum].sort(); // Alphabetical sorting
       input.value = '';
       renderList(listNum);
     }
@@ -145,7 +261,7 @@ const defaultLists = {
     function deleteItem(listNum, index) {
       if (index === selectedIndices[listNum]) {
         selectedIndices[listNum] = null;
-      } else if (index < selectedIndices[listNum]) {
+      } else if (selectedIndices[listNum] !== null && index < selectedIndices[listNum]) {
         selectedIndices[listNum]--;
       }
       lists[listNum].splice(index, 1);
@@ -185,13 +301,6 @@ const defaultLists = {
     function randomizeAll() {
       for (let i = 1; i <= 4; i++) {
         pickRandom(i);
-      }
-    }
-
-    // Reset all lists and selections
-    function resetAll() {
-      for (let i = 1; i <= 4; i++) {
-        resetList(i);
       }
     }
 
@@ -256,3 +365,4 @@ function handleFileImport(event) {
       renderAll();
       updateSelectedText();
     };
+	
