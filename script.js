@@ -249,6 +249,7 @@ function renderAll() {
 
 // Initial setup on page load
 window.onload = () => {
+  console.log("Loading site!")
   // Initialize currentTopics with all yearGroups active
   currentTopics = buildCurrentTopicsFromActiveGroups();
   lists[1] = [...currentTopics].sort();
@@ -262,12 +263,6 @@ window.onload = () => {
     }
   }
 
-  renderAll();
-  updateSelectedText();
-};
-
-window.onload = () => {
-  console.log('Page loaded, running initial render');
   renderAll();
   updateSelectedText();
 };
