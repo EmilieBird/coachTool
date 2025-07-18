@@ -247,6 +247,7 @@ function renderAll() {
   }
 }
 
+
 // Initial setup on page load
 window.onload = () => {
   console.log("Loading site!")
@@ -266,3 +267,51 @@ window.onload = () => {
   renderAll();
   updateSelectedText();
 };
+
+ // Export lists as JSON and prompt user to copy
+function exportLists() {
+  const exportData = JSON.stringify(lists, null, 2);
+  const blob = new Blob([exportData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lister.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+
+function triggerFileInput() {
+  document.getElementById('fileInput').click();
+}
+
+function handleFileImport(event) {
+  const file = event.target.files[0];
+  const errorDiv = document.getElementById('importError');
+  if (!file) {
+    errorDiv.textContent = 'Ingen fil valgt.';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      for (let i = 1; i <= 4; i++) {
+        if (Array.isArray(imported[i])) {
+          lists[i] = imported[i];
+          selectedIndices[i] = null;
+        } else {
+          throw new Error('Forkert format i liste ' + i);
+        }
+      }
+      errorDiv.textContent = '';
+      renderAll();
+    } catch (err) {
+      errorDiv.textContent = 'Fejl ved import af fil: ' + err.message;
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // Reset so same file can be re-selected
+}
